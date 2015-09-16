@@ -58,7 +58,7 @@ class TestInstallation(BaseProductTestCase):
         """.format(mount_dir=self.cluster.mount_dir,
                    install_dir=install_dir)
 
-        self.assertRaisesRegexp(OSError, 'mkdir: cannot create directory '
+        self.assertRaisesRegexp(OSError, 'xmkdir: cannot create directory '
                                 '`/var/log/prestoadmin\': Permission denied',
                                 self.cluster.run_script_on_host, script,
                                 self.cluster.master)

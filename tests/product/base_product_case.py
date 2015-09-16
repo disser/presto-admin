@@ -17,6 +17,7 @@ Base class for product tests.  Handles setting up a docker cluster and has
 other utilities
 """
 
+import sys
 import fnmatch
 import json
 import re
@@ -33,6 +34,7 @@ from tests.base_test_case import BaseTestCase
 from tests.configurable_cluster import ConfigurableCluster
 from tests.docker_cluster import DockerCluster, DockerClusterException, \
     LOCAL_RESOURCES_DIR, DEFAULT_LOCAL_MOUNT_POINT, DEFAULT_DOCKER_MOUNT_POINT
+
 
 RPM_BASENAME = r'presto.*'
 
@@ -170,9 +172,12 @@ query.max-memory=50GB\n"""
         self.assert_installed(cluster.master, cluster=cluster,
                               msg=output)
 
+    def wasSuccessful(self):
+        return sys.exc_info() == (None, None, None)
+
     def tearDown(self):
         self.restore_stdout_stderr_keep_open()
-        if self.cluster:
+        if self.cluster and self.wasSuccessful():
             self.cluster.tear_down()
         super(BaseProductTestCase, self).tearDown()
 
